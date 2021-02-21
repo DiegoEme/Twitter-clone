@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import firebase from './firebase';
+import firebase from './myBase';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 
