@@ -1,14 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { dbService } from "myBase";
 
 const Home = () => {
   const [tweet, setTweet] = useState("");
+  const [tweets, setTweets] = useState([]);
+
+  const getTweets = async () => {
+    const dbTweets = await dbService.collection("tweets").get();
+    dbTweets.forEach((doc) => {
+      const tweetObject = {
+        ...doc.data(),
+        id: doc.id,
+      }
+      setTweets((prev) => {
+        return [tweetObject, ...prev]
+      })
+    })
+  };
+
+  useEffect(() => {
+    getTweets();
+  }, []);
 
   const onSubmit = async (event) => {
     event.preventDefault();
     await dbService.collection("tweets").add({
       tweet,
-      createdAt: Date.now()
+      createdAt: Date.now(),
     });
     setTweet("");
   };
@@ -18,6 +36,7 @@ const Home = () => {
     setTweet(value);
   };
 
+  console.log(tweets)
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -30,6 +49,13 @@ const Home = () => {
         />
         <input type="submit" valur="Tweet" />
       </form>
+      <div>
+        {tweets.map((tweet) => (
+          <div key={tweet.id}>
+            <h4>{tweet.tweet}</h4>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
