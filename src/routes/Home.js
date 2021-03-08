@@ -1,32 +1,44 @@
 import React, { useState, useEffect } from "react";
 import { dbService } from "myBase";
 
-const Home = () => {
+const Home = ({userObject}) => {
+  
   const [tweet, setTweet] = useState("");
   const [tweets, setTweets] = useState([]);
 
-  const getTweets = async () => {
+ /*  const getTweets = async () => {
     const dbTweets = await dbService.collection("tweets").get();
     dbTweets.forEach((doc) => {
       const tweetObject = {
         ...doc.data(),
         id: doc.id,
+        
       }
       setTweets((prev) => {
         return [tweetObject, ...prev]
       })
     })
-  };
+  }; */
 
   useEffect(() => {
-    getTweets();
+   // getTweets(); Not used beacause snapshot is used
+    //event listener that gets triggered when the db is changed
+    //Realtime tweets
+    dbService.collection("tweets").onSnapshot((snapshot) => {
+      const tweetsArray = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        data: doc.data(),
+      }));
+      setTweets(tweetsArray);
+    })
   }, []);
 
   const onSubmit = async (event) => {
     event.preventDefault();
     await dbService.collection("tweets").add({
-      tweet,
+      text: tweet,
       createdAt: Date.now(),
+      creatorId: userObject.uid
     });
     setTweet("");
   };
@@ -52,7 +64,7 @@ const Home = () => {
       <div>
         {tweets.map((tweet) => (
           <div key={tweet.id}>
-            <h4>{tweet.tweet}</h4>
+            <h4>{tweet.data.text}</h4>
           </div>
         ))}
       </div>

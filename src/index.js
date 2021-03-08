@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import firebase from './myBase';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 
-console.log(firebase)
 
 ReactDOM.render(
   <React.StrictMode>

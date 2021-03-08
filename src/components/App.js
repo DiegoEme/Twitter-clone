@@ -5,11 +5,13 @@ import { authService } from "myBase";
 function App() {
   const [init, setInit] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
+  const [userObject, setUserObject] = useState(null);
+
   useEffect(() => {
    authService.onAuthStateChanged((user) => {
      if(user) {
        setIsLoggedIn(true);
+       setUserObject(user);
      } else {
        setIsLoggedIn(false);
      }
@@ -19,7 +21,7 @@ function App() {
   
   return (
     <div className="App">
-     { init ? <AppRouter  isLoggedIn = {isLoggedIn}/> : "Initializing..."}
+     { init ? <AppRouter userObject={userObject} isLoggedIn = {isLoggedIn}/> : "Initializing..."}
     </div>
   );
 }

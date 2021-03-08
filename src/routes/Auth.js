@@ -1,6 +1,5 @@
 import authService from 'myBase';
 import {useState} from 'react';
-import firebaseInstance from 'myBase';
 import firebase from 'firebase/app'
 
 
@@ -25,13 +24,15 @@ const Auth = () => {
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
-        let data;
+        //let data;
         if(newAccount){
-            data = await authService.createUserWithEmailAndPassword(email, password)
+            //data = 
+            await authService.createUserWithEmailAndPassword(email, password)
         } else {
-            data = await authService.signInWithEmailAndPassword(email, password)
+            //data = 
+            await authService.signInWithEmailAndPassword(email, password)
         }
-        console.log(data);
+        
     } catch (error) {
         setError(error.message);
     }    
@@ -52,9 +53,6 @@ const Auth = () => {
     if(name==="github"){
       await authService.signInWithPopup(new firebase.auth.GithubAuthProvider());
     }
-
-    
-    //console.log(data)
 
 
   }
