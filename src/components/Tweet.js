@@ -32,7 +32,7 @@ function Tweet({ tweetObject, isOwner }) {
     <div>
       {editing ? (
           <>
-        <form onSubmit={onSubmit}>
+        {isOwner && (<><form onSubmit={onSubmit}>
           <input 
           onChange={onChange}
           type="text" 
@@ -41,7 +41,7 @@ function Tweet({ tweetObject, isOwner }) {
           required />
           <input type="submit" value="Update"/>
         </form>
-        <button onClick={toggleEditing}>Cancel</button>
+        <button onClick={toggleEditing}>Cancel</button></>)}
         </>
       ) : (
         <>
