@@ -6,6 +6,7 @@ const Home = ({userObject}) => {
   
   const [tweet, setTweet] = useState("");
   const [tweets, setTweets] = useState([]);
+  const [pic, setPic] = useState();
 
  /*  const getTweets = async () => {
     const dbTweets = await dbService.collection("tweets").get();
@@ -56,12 +57,15 @@ const Home = ({userObject}) => {
     const theFile = files[0];
     const reader = new FileReader();
     reader.onloadend = (finishEvent) => {
-      console.log(finishEvent)
+      console.log(finishEvent);
+      setPic(finishEvent.target.result)
     }
     reader.readAsDataURL(theFile);
 
 
   }
+
+  const onClearPic = () => setPic(null);
 
   return (
     <div>
@@ -75,6 +79,12 @@ const Home = ({userObject}) => {
         />
         <input type="file" accept="image/*" onChange={onFileChange}/> 
         <input type="submit" value="Tweet" />
+        {pic && (
+          <div>
+            <img src={pic} width="50px"  height="50px"/>
+            <button onClick={onClearPic}>Clear </button>
+          </div>        
+        )}
       </form>
       <div>
         {tweets.map((tweet) => (
