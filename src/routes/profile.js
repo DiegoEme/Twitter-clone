@@ -9,6 +9,7 @@ function Profile({refreshUser, userObject}) {
     const onLogOutClick = () => {
         authService.signOut();
         history.push("/");
+        
     }
 
     const getMyTweets = async () => {

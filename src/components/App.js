@@ -17,6 +17,7 @@ function App() {
          updateProfile: (args) => user.updateProfile(args)
        });
      } else {
+       
        setIsLoggedIn(false);
      }
      setInit(true)
