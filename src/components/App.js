@@ -11,7 +11,11 @@ function App() {
    authService.onAuthStateChanged((user) => {
      if(user) {
        setIsLoggedIn(true);
-       setUserObject(user);
+       setUserObject({
+         displayName: user.displayName,
+         uid: user.uid,
+         updateProfile: (args) => user.updateProfile(args)
+       });
      } else {
        setIsLoggedIn(false);
      }
@@ -19,9 +23,23 @@ function App() {
    })
   }, [])
   
+  const refreshUser = () => {
+    const user = authService.currentUser;
+    setUserObject({
+         displayName: user.displayName,
+         uid: user.uid,
+         updateProfile: (args) => user.updateProfile(args)
+    });
+  }
+
   return (
     <div className="App">
-     { init ? <AppRouter userObject={userObject} isLoggedIn = {isLoggedIn}/> : "Initializing..."}
+     { init ? 
+     <AppRouter 
+      refreshUser={refreshUser}
+      userObject={userObject} 
+      isLoggedIn = {isLoggedIn}
+      /> : "Initializing..."}
     </div>
   );
 }
