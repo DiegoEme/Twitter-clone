@@ -7,7 +7,7 @@ const Home = ({userObject}) => {
   
   const [tweet, setTweet] = useState("");
   const [tweets, setTweets] = useState([]);
-  const [pic, setPic] = useState();
+  const [pic, setPic] = useState("");
 
  /*  const getTweets = async () => {
     const dbTweets = await dbService.collection("tweets").get();

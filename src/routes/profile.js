@@ -1,8 +1,25 @@
-import authService from 'myBase'
-import React from 'react'
+import React, {useEffect} from 'react';
+import authService, { dbService } from 'myBase';
+import {useHistory} from 'react-router-dom'
 
-function Profile() {
-    const onLogOutClick = () => authService.signOut();
+function Profile({userObject}) {
+    const history = useHistory();
+    const onLogOutClick = () => {
+        authService.signOut();
+        history.push("/");
+    }
+
+    const getMyTweets = async () => {
+        const tweets = await dbService
+        .collection("tweets")
+        .where("creatorId", "==", userObject.uid)
+        .get();
+        console.log(tweets.docs.map(doc => doc.data()));
+    }
+
+    useEffect(() => {
+        getMyTweets()
+    }, [])
 
     return (
         <div>
