@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { dbService } from "myBase";
+import {v4 as uuidv4} from 'uuid'
+import { dbService, storageService } from "myBase";
 import Tweet from "components/Tweet";
 
 const Home = ({userObject}) => {
@@ -37,12 +38,26 @@ const Home = ({userObject}) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    await dbService.collection("tweets").add({
+    let picUrl = "";
+
+    if(pic !== ""){
+      const fileRef = storageService
+      .ref()
+      .child(`${userObject.uid}/${uuidv4()}`)
+      const response = await fileRef.putString(pic, "data_url");
+      picUrl = await response.ref.getDownloadURL();
+    }
+ 
+    const tweetObj = {
       text: tweet,
       createdAt: Date.now(),
-      creatorId: userObject.uid
-    });
+      creatorId: userObject.uid,
+      picUrl
+    }
+
+    await dbService.collection("tweets").add(tweetObj);
     setTweet("");
+    setPic("");
   };
 
   const onChange = (event) => {
@@ -57,7 +72,7 @@ const Home = ({userObject}) => {
     const theFile = files[0];
     const reader = new FileReader();
     reader.onloadend = (finishEvent) => {
-      console.log(finishEvent);
+      //console.log(finishEvent);
       setPic(finishEvent.target.result)
     }
     reader.readAsDataURL(theFile);

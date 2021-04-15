@@ -1,5 +1,5 @@
 import React from "react";
-import { dbService } from "myBase";
+import { dbService, storageService } from "myBase";
 import { useState } from "react";
 
 function Tweet({ tweetObject, isOwner }) {
@@ -10,6 +10,7 @@ function Tweet({ tweetObject, isOwner }) {
     const confirm = window.confirm("Are you sure you wanna delete the tweet?");
     if (confirm) {
       await dbService.doc(`tweets/${tweetObject.id}`).delete();
+      await storageService.refFromURL(tweetObject.picUrl).delete();
     }
   };
 
@@ -46,6 +47,7 @@ function Tweet({ tweetObject, isOwner }) {
       ) : (
         <>
           <h4>{tweetObject.data.text}</h4>
+          {tweetObject.data.picUrl && <img width="50px" src={tweetObject.data.picUrl}/>}
           {isOwner && (
             <>
               <button onClick={onDeleteClick}>Delete</button>
